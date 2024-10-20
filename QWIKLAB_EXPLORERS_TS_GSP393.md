@@ -2,6 +2,8 @@
 
 # # Like, comment, share & Don't forget to subscribe [Qwiklab_Explorers_ts](https://youtube.com/@titashshil?si=RgamNu1dc9jVIbJN) 👍😄🤝
 
+---
+
 ### Run the following Commands in CloudShell
 
 ```
@@ -93,7 +95,7 @@ for cluster in "${CLUSTERS[@]}"; do
   
   while [ "$status" != "RUNNING" ]; do
     echo "Waiting for $cluster to be RUNNING..."
-    echo "like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
+    echo "Like Share and Subscribe to QWIKLAB_EXPLORERS_TS [https://www.youtube.com/@qwiklabexplorers]..."
 
     sleep 10  # Adjust the sleep duration as needed
     status=$(gcloud container clusters describe "$cluster" --format="value(status)")
@@ -154,7 +156,7 @@ while true; do
   fi
   
   # Wait for a short duration before checking agai
-  echo "it's creating now so kindly wait meanwhile like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
+  echo "it's creating now so kindly wait meanwhile like share and subscribe to Qwiklab_Explorers_TS [https://www.youtube.com/@qwiklabexplorers]"
 
   sleep 10
 done
@@ -179,7 +181,7 @@ while true; do
   fi
   
   # Wait for a short duration before checking again
-  echo "it's creating now so kindly wait meanwhile like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
+  echo "it's creating now so kindly wait meanwhile like share and subscribe to Qwiklab_Explorers_TS [https://www.youtube.com/@qwiklabexplorers]"
   sleep 10
 done
 
@@ -201,7 +203,7 @@ while true; do
   fi
   
   # Wait for a short duration before checking again
-  echo "it's creating now so kindly wait meanwhile like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
+  echo "it's creating now so kindly wait meanwhile like share and subscribe to Qwiklab_Explorers_TS [https://www.youtube.com/@qwiklabexplorers]"
   sleep 10
 done
 
@@ -241,7 +243,7 @@ while true; do
   fi
   
   # Wait for a short duration before checking agai
-  echo "it's creating now so kindly wait meanwhile like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
+  echo "it's creating now so kindly wait meanwhile like share and subscribe to Qwiklab_Explorers_TS [https://www.youtube.com/@qwiklabexplorers]"
 
   sleep 10
 done
@@ -251,7 +253,11 @@ gcloud deploy targets rollback cd-staging \
    --delivery-pipeline=web-app \
    --quiet
 
+
+
 ```
+
+---
 
 
 # Congratulations ..!!🎉  You completed the lab shortly..😃💯
