@@ -5,9 +5,16 @@
 ### Run the following Commands in CloudShell
 
 ```
-export ZONE=
-```
-```
+echo ""
+echo ""
+echo "Please export the values."
+
+
+# Prompt user to input three regions
+read -p "Enter ZONE: " ZONE
+
+
+
 export PROJECT_ID=$(gcloud config get-value project)
 export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format='value(projectNumber)')
 export REGION="${ZONE%-*}"
@@ -20,7 +27,9 @@ artifactregistry.googleapis.com \
 cloudbuild.googleapis.com \
 clouddeploy.googleapis.com
 
+
 sleep 20
+
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
 --member=serviceAccount:$(gcloud projects describe $PROJECT_ID \
@@ -32,6 +41,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 --format="value(projectNumber)")-compute@developer.gserviceaccount.com \
 --role="roles/container.developer"
 
+
 gcloud artifacts repositories create cicd-challenge \
 --description="Image registry for tutorial web app" \
 --repository-format=docker \
@@ -40,14 +50,17 @@ gcloud artifacts repositories create cicd-challenge \
 gcloud container clusters create cd-staging --node-locations=$ZONE --num-nodes=1 --async
 gcloud container clusters create cd-production --node-locations=$ZONE --num-nodes=1 --async
 
+
 cd ~/
 git clone https://github.com/GoogleCloudPlatform/cloud-deploy-tutorials.git
 cd cloud-deploy-tutorials
 git checkout c3cae80 --quiet
 cd tutorials/base
 
+
 envsubst < clouddeploy-config/skaffold.yaml.template > web/skaffold.yaml
 cat web/skaffold.yaml
+
 
 cd web
 skaffold build --interactive=false \
@@ -55,7 +68,60 @@ skaffold build --interactive=false \
 --file-output artifacts.json
 cd ..
 
+#TASK 3
+
 cp clouddeploy-config/delivery-pipeline.yaml.template clouddeploy-config/delivery-pipeline.yaml
+sed -i "s/targetId: staging/targetId: cd-staging/" clouddeploy-config/delivery-pipeline.yaml
+sed -i "s/targetId: prod/targetId: cd-production/" clouddeploy-config/delivery-pipeline.yaml
+sed -i "/targetId: test/d" clouddeploy-config/delivery-pipeline.yaml
+
+gcloud config set deploy/region $REGION
+cp clouddeploy-config/delivery-pipeline.yaml.template clouddeploy-config/delivery-pipeline.yaml
+sed -i "s/targetId: staging/targetId: cd-staging/" clouddeploy-config/delivery-pipeline.yaml
+sed -i "s/targetId: prod/targetId: cd-production/" clouddeploy-config/delivery-pipeline.yaml
+sed -i "/targetId: test/d" clouddeploy-config/delivery-pipeline.yaml
+gcloud beta deploy apply --file=clouddeploy-config/delivery-pipeline.yaml
+
+gcloud beta deploy delivery-pipelines describe web-app
+
+#!/bin/bash
+
+CLUSTERS=("cd-production" "cd-staging")
+
+for cluster in "${CLUSTERS[@]}"; do
+  status=$(gcloud container clusters describe "$cluster" --format="value(status)")
+  
+  while [ "$status" != "RUNNING" ]; do
+    echo "Waiting for $cluster to be RUNNING..."
+    echo "like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
+
+    sleep 10  # Adjust the sleep duration as needed
+    status=$(gcloud container clusters describe "$cluster" --format="value(status)")
+  done
+  
+  echo "$cluster is now RUNNING. Proceeding with the next command."
+  
+  
+done
+
+
+
+CONTEXTS=("cd-staging" "cd-production" )
+for CONTEXT in ${CONTEXTS[@]}
+do
+    gcloud container clusters get-credentials ${CONTEXT} --region ${REGION}
+    kubectl config rename-context gke_${PROJECT_ID}_${REGION}_${CONTEXT} ${CONTEXT}
+done
+
+
+for CONTEXT in ${CONTEXTS[@]}
+do
+    kubectl --context ${CONTEXT} apply -f kubernetes-config/web-app-namespace.yaml
+done
+
+envsubst < clouddeploy-config/target-staging.yaml.template > clouddeploy-config/target-cd-staging.yaml
+envsubst < clouddeploy-config/target-prod.yaml.template > clouddeploy-config/target-cd-production.yaml
+sed -i "s/staging/cd-staging/" clouddeploy-config/target-cd-staging.yaml
 sed -i "s/prod/cd-production/" clouddeploy-config/target-cd-production.yaml
 
 
@@ -64,6 +130,9 @@ do
     envsubst < clouddeploy-config/target-$CONTEXT.yaml.template > clouddeploy-config/target-$CONTEXT.yaml
     gcloud beta deploy apply --file clouddeploy-config/target-$CONTEXT.yaml
 done
+
+
+
 
 gcloud beta deploy releases create web-app-001 \
 --delivery-pipeline web-app \
@@ -85,7 +154,7 @@ while true; do
   fi
   
   # Wait for a short duration before checking agai
-  echo "it's creating now, please wait..."
+  echo "it's creating now so kindly wait meanwhile like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
 
   sleep 10
 done
@@ -110,7 +179,7 @@ while true; do
   fi
   
   # Wait for a short duration before checking again
-  echo "it's creating now, please wait..."
+  echo "it's creating now so kindly wait meanwhile like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
   sleep 10
 done
 
@@ -132,9 +201,11 @@ while true; do
   fi
   
   # Wait for a short duration before checking again
-  echo "it's creating now, please wait..."
+  echo "it's creating now so kindly wait meanwhile like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
   sleep 10
 done
+
+
 
 gcloud services enable cloudbuild.googleapis.com
 
@@ -170,14 +241,18 @@ while true; do
   fi
   
   # Wait for a short duration before checking agai
-  echo "it's creating now, please wait..."
+  echo "it's creating now so kindly wait meanwhile like share and subscribe to Quicklab_Explorers_TS"[https://www.youtube.com/@qwiklabexplorers]"
+
   sleep 10
 done
+
 
 gcloud deploy targets rollback cd-staging \
    --delivery-pipeline=web-app \
    --quiet
+
 ```
+
 
 # Congratulations ..!!🎉  You completed the lab shortly..😃💯
 
